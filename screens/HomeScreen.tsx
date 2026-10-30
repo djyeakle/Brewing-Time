@@ -1,8 +1,29 @@
+import { PixelifySans_400Regular } from "@expo-google-fonts/pixelify-sans";
+import { useFonts } from "expo-font";
 import React from "react";
-import { Text, View, StyleSheet, Pressable, Image } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Pressable,
+  Image,
+  ActivityIndicator,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen({ navigation }: any) {
+  const [fontsLoaded] = useFonts({
+    PixelifySans_400Regular,
+  });
+  if (!fontsLoaded) {
+    return (
+      <View>
+        <ActivityIndicator size="large" color="0000ff" />
+        <Text>Loading fonts...</Text>
+      </View>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Hello, "Name"!</Text>
