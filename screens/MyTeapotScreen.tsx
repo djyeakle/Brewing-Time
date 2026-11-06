@@ -83,6 +83,24 @@ export default function MyTeapotScreen({ navigation }: any) {
     setTeaName("");
     setTeaType("");
     setTeaAmount("");
+    setValue(null);
+  };
+
+  const deleteConfirm = (id: string) => {
+    Alert.alert(
+      "Delete Tea",
+      "Are you sure you want to delete this tea?",
+      [
+        {
+          text: "Cancel",
+        },
+        {
+          text: "Delete",
+          onPress: () => deleteTea(id),
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
   const deleteTea = (id: string) => {
@@ -120,6 +138,7 @@ export default function MyTeapotScreen({ navigation }: any) {
           value={value}
           onChange={(item) => {
             setValue(item.value);
+            setTeaType(item.label);
           }}
         />
         <TextInput
@@ -142,16 +161,20 @@ export default function MyTeapotScreen({ navigation }: any) {
           }
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <View>
-              <Text>{item.name}</Text>
-              <Pressable>
-                <Text>Brew</Text>
+            <View style={styles.teaContainer}>
+              <Text style={styles.teaText}>{item.name}</Text>
+              <Pressable style={styles.brew}>
+                <Text style={styles.teaText}>Brew</Text>
               </Pressable>
               <Pressable>
-                <Image></Image>
+                <Image
+                  source={require("../assets/edit_24dp_1F1F1F_FILL0_wght400_GRAD0_opsz24.png")}
+                />
               </Pressable>
-              <Pressable>
-                <Image></Image>
+              <Pressable onPress={() => deleteConfirm(item.id)}>
+                <Image
+                  source={require("../assets/delete_24dp_1F1F1F_FILL0_wght400_GRAD0_opsz24.png")}
+                />
               </Pressable>
             </View>
           )}
@@ -234,5 +257,19 @@ const styles = StyleSheet.create({
     fontFamily: "PixelifySans_400Regular",
     fontSize: 32,
     marginTop: 15,
+  },
+  teaContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 15,
+  },
+  teaText: {
+    fontFamily: "PixelifySans_400Regular",
+    fontSize: 14,
+  },
+  brew: {
+    backgroundColor: "#C47955",
+    borderRadius: 5,
+    padding: 3,
   },
 });
