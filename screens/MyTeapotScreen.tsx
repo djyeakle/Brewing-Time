@@ -107,6 +107,16 @@ export default function MyTeapotScreen({ navigation }: any) {
     setTeas((current) => current.filter((tea) => tea.id !== id));
   };
 
+  const brewTea = (teaType: string) => {
+    if (teaType === "Black Tea") {
+      navigation.navigate("Black Tea");
+    } else if (teaType === "Green Tea") {
+      navigation.navigate("Green Tea");
+    } else if (teaType === "Herbal Tea") {
+      navigation.navigate("Herbal Tea");
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>My Teapot</Text>
@@ -119,8 +129,11 @@ export default function MyTeapotScreen({ navigation }: any) {
             {formVisible ? "Close Form" : "Add to brew"}
           </Text>
         </Pressable>
-        <Pressable style={styles.button2}>
-          <Text style={styles.buttonText}>Other button?</Text>
+        <Pressable
+          style={styles.button2}
+          onPress={() => navigation.navigate("Home")}
+        >
+          <Text style={styles.buttonText}>Back</Text>
         </Pressable>
       </View>
       <View style={formVisible ? styles.visible : styles.hidden}>
@@ -135,6 +148,10 @@ export default function MyTeapotScreen({ navigation }: any) {
           labelField="label"
           valueField="value"
           placeholder="Select tea type"
+          placeholderStyle={styles.dropdownText}
+          selectedTextStyle={styles.dropdownText}
+          itemTextStyle={styles.dropdownText}
+          style={[styles.dropdown, styles.input]}
           value={value}
           onChange={(item) => {
             setValue(item.value);
@@ -163,19 +180,29 @@ export default function MyTeapotScreen({ navigation }: any) {
           renderItem={({ item }) => (
             <View style={styles.teaContainer}>
               <Text style={styles.teaText}>{item.name}</Text>
-              <Pressable style={styles.brew}>
-                <Text style={styles.teaText}>Brew</Text>
-              </Pressable>
-              <Pressable>
-                <Image
-                  source={require("../assets/edit_24dp_1F1F1F_FILL0_wght400_GRAD0_opsz24.png")}
-                />
-              </Pressable>
-              <Pressable onPress={() => deleteConfirm(item.id)}>
-                <Image
-                  source={require("../assets/delete_24dp_1F1F1F_FILL0_wght400_GRAD0_opsz24.png")}
-                />
-              </Pressable>
+              <View style={styles.optionsContainer}>
+                <Pressable
+                  style={styles.brew}
+                  onPress={() => brewTea(item.type)}
+                >
+                  <Text style={[styles.teaText, styles.brewText]}>Brew</Text>
+                </Pressable>
+                <Pressable>
+                  <Image
+                    source={require("../assets/edit_24dp_1F1F1F_FILL0_wght400_GRAD0_opsz24.png")}
+                  />
+                </Pressable>
+                <Pressable onPress={() => deleteConfirm(item.id)}>
+                  <Image
+                    source={require("../assets/delete_24dp_1F1F1F_FILL0_wght400_GRAD0_opsz24.png")}
+                  />
+                </Pressable>
+                <Pressable>
+                  <Image
+                    source={require("../assets/more_vert_24dp_1F1F1F_FILL0_wght400_GRAD0_opsz24.png")}
+                  />
+                </Pressable>
+              </View>
             </View>
           )}
         />
@@ -211,6 +238,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     marginTop: 30,
   },
+  optionsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "50%",
+  },
   button1: {
     alignSelf: "center",
     backgroundColor: "#4C2744",
@@ -224,6 +256,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 120,
     height: 60,
+    paddingTop: 15,
   },
   buttonText: {
     color: "#F3E8DE",
@@ -236,12 +269,21 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 20,
   },
+  dropdown: {
+    marginLeft: 5,
+  },
+  dropdownText: {
+    fontFamily: "PixelifySans_400Regular",
+    fontSize: 20,
+    color: "#666666",
+  },
   button3: {
     alignSelf: "center",
     backgroundColor: "#C47955",
     borderRadius: 10,
     width: 120,
     height: 60,
+    paddingTop: 15,
   },
   flatlist: {
     alignSelf: "center",
@@ -271,5 +313,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#C47955",
     borderRadius: 5,
     padding: 3,
+  },
+  brewText: {
+    color: "#F3E8DE",
   },
 });
